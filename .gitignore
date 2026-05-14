@@ -1,0 +1,9 @@
+bin/
+obj/
+compiled/
+*.user
+*.suo
+*.log
+*.dll
+!*.cs
+GeoLite2-Country.mmdb
