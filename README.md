@@ -1,5 +1,7 @@
 # Absynthium_Countryflags
 
+<img width="771" height="29" alt="730_80" src="https://github.com/user-attachments/assets/c45ee56b-e834-41dd-9925-94ed5bb09ac9" />
+
 Portage CounterStrikeSharp du plugin SourceMod Franug Country Flag Icons.
 
 Le plugin remplace le badge/pin affiche dans le scoreboard CS2 par un index d'icone de drapeau pays. Les assets doivent etre fournis cote client via votre addon Workshop, puis charges sur le serveur par votre plugin/workflow Workshop habituel.
