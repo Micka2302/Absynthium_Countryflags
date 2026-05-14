@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Absynthium_Countryflags", "Absynthium_Countryflags.csproj", "{FE9D3E96-8114-F9DE-8C69-100E801DA24F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE9D3E96-8114-F9DE-8C69-100E801DA24F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE9D3E96-8114-F9DE-8C69-100E801DA24F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE9D3E96-8114-F9DE-8C69-100E801DA24F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE9D3E96-8114-F9DE-8C69-100E801DA24F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8FE175A2-D41B-4402-8E72-693A536DF16B}
+	EndGlobalSection
+EndGlobal
