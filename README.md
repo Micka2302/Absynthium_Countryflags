@@ -85,8 +85,8 @@ game/csgo/cfg/multiaddonmanager/multiaddonmanager.cfg
 Exemple:
 
 ```cfg
-mm_extra_addons "1234567890"
-mm_client_extra_addons "1234567890"
+mm_extra_addons ""
+mm_client_extra_addons "3725532619"
 ```
 
 Remplacez `1234567890` par l'ID Workshop de votre addon. Si vous avez deja d'autres addons, separez les IDs par des virgules.
