@@ -13,4 +13,7 @@ public sealed class CountryFlagsConfig : BasePluginConfig
 
     [JsonPropertyName("GeoLiteCountryDatabasePath")]
     public string GeoLiteCountryDatabasePath { get; set; } = "GeoLite2-Country.mmdb";
+
+    [JsonPropertyName("EnableScoreboardBadges")]
+    public bool EnableScoreboardBadges { get; set; } = true;
 }

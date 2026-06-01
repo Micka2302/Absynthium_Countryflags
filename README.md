@@ -9,13 +9,13 @@ Le pays est resolu via MaxMind GeoLite2 Country, puis converti en ID d'icone gra
 Serveur:
 
 - CounterStrikeSharp, API 80 minimum: https://github.com/roflmuffin/CounterStrikeSharp
-- .NET 8 runtime, comme requis par CounterStrikeSharp.
+- Runtime .NET requis par votre build CounterStrikeSharp.
 - MaxMind GeoLite2 Country: fichier `GeoLite2-Country.mmdb`.
 - MultiAddonManager: https://github.com/Source2ZE/MultiAddonManager
 
 Build local:
 
-- .NET 8 SDK.
+- .NET 10 SDK.
 
 ## Build
 
@@ -32,7 +32,7 @@ Package complet:
 Sorties utiles:
 
 ```text
-bin/Release/net8.0/
+bin/Release/net10.0/
 compiled/addons/counterstrikesharp/
 compiled/csgo_addons/addons_absynthium/
 compiled/Absynthium_Countryflags.zip
@@ -102,6 +102,7 @@ Exemple minimal:
 {
   "ConfigVersion": 1,
   "GeoLiteCountryDatabasePath": "GeoLite2-Country.mmdb",
+  "EnableScoreboardBadges": true,
   "CountryFlags": {
     "UNKNOWN": 1004,
     "FR": 1018,
@@ -116,6 +117,7 @@ Champs:
 
 - `ConfigVersion`: version de la config CounterStrikeSharp.
 - `GeoLiteCountryDatabasePath`: chemin vers `GeoLite2-Country.mmdb`. Un chemin relatif part du dossier du plugin.
+- `EnableScoreboardBadges`: active l'ecriture du badge dans le scoreboard. Mettre `false` permet de demarrer le plugin sans toucher `InventoryServices`.
 - `CountryFlags`: table `code pays ISO 3166-1 alpha-2 -> ID badge/pin CS2`.
 - `UNKNOWN`: ID utilise si l'IP ne peut pas etre resolue ou si le pays n'est pas mappe.
 

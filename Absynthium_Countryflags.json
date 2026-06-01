@@ -1,6 +1,7 @@
 {
   "ConfigVersion": 1,
   "GeoLiteCountryDatabasePath": "GeoLite2-Country.mmdb",
+  "EnableScoreboardBadges": true,
   "CountryFlags": {
     "UNKNOWN": 1004,
     "US": 1005,

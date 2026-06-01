@@ -39,6 +39,8 @@ public sealed class CountryFlagsPlugin : BasePlugin, IPluginConfig<CountryFlagsC
     {
         LoadFiles();
 
+        Logger.LogInformation("Registering CounterStrikeSharp listeners.");
+
         RegisterListener<Listeners.OnClientConnect>((slot, _, ipAddress) =>
         {
             _connectedIps[slot] = NormalizeIpAddress(ipAddress) ?? ipAddress;
@@ -51,13 +53,7 @@ public sealed class CountryFlagsPlugin : BasePlugin, IPluginConfig<CountryFlagsC
 
         RegisterListener<Listeners.OnClientPutInServer>(slot =>
         {
-            var player = Utilities.GetPlayerFromSlot(slot);
-            if (player is null || !player.IsValid || player.IsBot)
-            {
-                return;
-            }
-
-            ApplyPlayerFlag(player);
+            AddTimer(0.2f, () => ApplyPlayerFlagFromSlot(slot));
         });
 
         RegisterListener<Listeners.OnClientDisconnect>(slot =>
@@ -70,11 +66,14 @@ public sealed class CountryFlagsPlugin : BasePlugin, IPluginConfig<CountryFlagsC
 
         if (hotReload)
         {
-            foreach (var player in Utilities.GetPlayers().Where(player => player.IsValid && !player.IsBot))
+            foreach (var player in Utilities.GetPlayers().Where(IsUsablePlayer))
             {
-                ApplyPlayerFlag(player);
+                var slot = player.Slot;
+                AddTimer(0.2f, () => ApplyPlayerFlagFromSlot(slot));
             }
         }
+
+        Logger.LogInformation("Plugin loaded. Scoreboard badges are {State}.", Config.EnableScoreboardBadges ? "enabled" : "disabled");
     }
 
     private HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
@@ -108,7 +107,8 @@ public sealed class CountryFlagsPlugin : BasePlugin, IPluginConfig<CountryFlagsC
     {
         foreach (var player in Utilities.GetPlayers().Where(IsUsablePlayer))
         {
-            ApplyPlayerFlag(player);
+            var slot = player.Slot;
+            AddTimer(0.2f, () => ApplyPlayerFlagFromSlot(slot));
         }
 
         return HookResult.Continue;
@@ -142,14 +142,23 @@ public sealed class CountryFlagsPlugin : BasePlugin, IPluginConfig<CountryFlagsC
         _geoIpReader = null;
 
         var geoPath = ResolvePluginPath(Config.GeoLiteCountryDatabasePath);
-        if (File.Exists(geoPath))
+        try
         {
-            _geoIpReader = new Reader(geoPath);
-            Logger.LogInformation("Loaded GeoIP database from {Path}.", geoPath);
+            if (File.Exists(geoPath))
+            {
+                _geoIpReader = new Reader(geoPath, FileAccessMode.Memory);
+                Logger.LogInformation("Loaded GeoIP database from {Path}.", geoPath);
+            }
+            else
+            {
+                Logger.LogWarning("GeoIP database not found at {Path}. Players will use UNKNOWN until the database is installed.", geoPath);
+            }
         }
-        else
+        catch (Exception exception)
         {
-            Logger.LogWarning("GeoIP database not found at {Path}. Players will use UNKNOWN until the database is installed.", geoPath);
+            _geoIpReader?.Dispose();
+            _geoIpReader = null;
+            Logger.LogError(exception, "Failed to load GeoIP database from {Path}. Players will use UNKNOWN.", geoPath);
         }
     }
 
@@ -157,6 +166,12 @@ public sealed class CountryFlagsPlugin : BasePlugin, IPluginConfig<CountryFlagsC
     {
         if (!IsUsablePlayer(player))
         {
+            return;
+        }
+
+        if (!Config.EnableScoreboardBadges)
+        {
+            _wantedLevels.Remove(player!.Slot);
             return;
         }
 
@@ -294,14 +309,27 @@ public sealed class CountryFlagsPlugin : BasePlugin, IPluginConfig<CountryFlagsC
 
     private void SetCountryFlagBadge(CCSPlayerController player, int badgeId)
     {
-        if (!IsUsablePlayer(player) || player.InventoryServices is null)
+        if (!Config.EnableScoreboardBadges || !IsUsablePlayer(player))
         {
             return;
         }
 
         try
         {
-            player.InventoryServices.Rank[5] = (MedalRank_t)badgeId;
+            var inventoryServices = player.InventoryServices;
+            if (inventoryServices is null)
+            {
+                return;
+            }
+
+            var ranks = inventoryServices.Rank;
+            if (ranks.Length <= 5)
+            {
+                Logger.LogWarning("Cannot apply country flag badge {BadgeId} to {PlayerName}: Rank array length is {Length}.", badgeId, player.PlayerName, ranks.Length);
+                return;
+            }
+
+            ranks[5] = (MedalRank_t)badgeId;
             Utilities.SetStateChanged(player, "CCSPlayerController", "m_pInventoryServices");
         }
         catch (Exception exception)

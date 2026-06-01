@@ -7,7 +7,7 @@ Set-Location $root
 
 $project = Join-Path $root 'Absynthium_Countryflags.csproj'
 $configuration = 'Release'
-$targetFramework = 'net8.0'
+$targetFramework = 'net10.0'
 $pluginName = 'Absynthium_Countryflags'
 $buildOutput = Join-Path $root "bin/$configuration/$targetFramework"
 $compiledRoot = Join-Path $root 'compiled'
